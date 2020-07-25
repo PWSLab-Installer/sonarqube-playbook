@@ -1,0 +1,23 @@
+---
+    workspace: /root
+    sonar_download_validate_certs: true
+    
+    # Default to the latest LTS release.
+    sonar_version: 8.4.1.35646
+    sonar_download_url: "https://binaries.sonarsource.com/Distribution/sonarqube/sonarqube-{{ sonar_version }}.zip"
+    sonar_version_directory: "sonarqube-{{ sonar_version }}"
+    
+    sonar_web_context: ''
+    
+    # postgres database connection details.
+    sonar_postgres_username: sonar
+    sonar_postgres_password: sonar
+    
+    sonar_postgres_host: localhost
+    sonar_postgres_port: "5432"
+    sonar_postgres_database: sonar
+    
+    sonar_postgres_allowed_hosts:
+      - "127.0.0.1"
+      - "::1"
+      - "localhost"

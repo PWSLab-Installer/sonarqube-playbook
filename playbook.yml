@@ -1,0 +1,78 @@
+- hosts: localhost
+  connection: local
+
+  vars:
+    postgresql_databases:
+        - name: sonar
+    postgresql_users:
+        - name: sonar
+            password: sonar
+            db: sonar
+  tasks:
+      
+    -   name: Check the version of OS
+        command: hostnamectl
+        register: os_check
+        ignore_errors: yes  
+    
+    - name: Fetch SonarQube Role
+      git:
+        repo: https://ro:Bxz4YNoEtvej4wAJCai5@pwslab.org/ansible/sonarqube-playbook.git
+        dest: /root/.ansible/roles/pwslab.sonarqube
+        version: master
+        force: yes
+
+    - name: Install Role Postgresql
+      local_action: command ansible-galaxy install -f geerlingguy.postgresql 
+
+    - name: Install Role Java
+      local_action: command ansible-galaxy install -f geerlingguy.java 
+
+    - name: Check if PostgreSQL is already installed
+      stat: path=/usr/bin/psql
+      register: psql_exists
+
+    - name: Check if Java is already installed
+      stat: path=/usr/sbin/jdk
+      register: jdk_exists
+
+    - name: Applying role postgresql
+      command: mv ~/.ansible/roles/geerlingguy.postgresql ~/.ansible/roles/pwslab.postgresql
+      when: not psql_exists.stat.exists
+      ignore_errors: yes
+
+    - name: Applying role Java
+      command: mv ~/.ansible/roles/geerlingguy.java ~/.ansible/roles/pwslab.java
+      when: not jdk_exists.stat.exists
+      ignore_errors: yes
+
+    - name: Installing Java
+      include_role:
+        name: pwslab.java
+      when: 
+        - os_check.stdout | regex_search("CentOS")
+      java_packages:
+        - java-11-openjdk
+
+    - name: Installing Java
+      include_role:
+        name: pwslab.java
+      when: 
+        - os_check.stdout | regex_search("Ubuntu")
+
+    - name: Installing PostgreSQL
+      include_role:
+          name: pwslab.postgresql
+      when: not psql_exists.stat.exists
+
+    -   name: Execute Postgres Process
+        postgresql_query:
+            # db: sonarqube
+            query: GRANT ALL PRIVILEGES ON DATABASE 'sonar' to sonar
+
+    - name: Installing SonarQube
+      include_role:
+          name: pwslab.sonarqube
+    
+
+    
