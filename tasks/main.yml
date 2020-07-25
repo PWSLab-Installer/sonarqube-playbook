@@ -11,6 +11,21 @@
     name: sonar
     group: sonar
 
+- name: Execute Postgres Commands
+  command: psql -c 'create database sonar;'
+  become: true
+  become_user: postgres
+
+- name: Execute Postgres Commands
+  command: psql -c 'CREATE USER sonar WITH PASSWORD 'sonar';'
+  become: true
+  become_user: postgres
+
+- name: Execute Postgres Commands
+  command: psql -c 'GRANT ALL PRIVILEGES ON DATABASE 'sonar' to sonar;'
+  become: true
+  become_user: postgres
+
 - name: Download Sonar
   get_url:
     url: "{{ sonar_download_url }}"

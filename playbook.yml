@@ -5,7 +5,7 @@
     postgresql_databases:
         - name: sonar
     postgresql_users:
-        - name: sonar
+        -   name: sonar
             password: sonar
             db: sonar
   tasks:
@@ -51,8 +51,9 @@
         name: pwslab.java
       when: 
         - os_check.stdout | regex_search("CentOS")
-      java_packages:
-        - java-11-openjdk
+      vars:
+        java_packages:
+            - java-11-openjdk
 
     - name: Installing Java
       include_role:
