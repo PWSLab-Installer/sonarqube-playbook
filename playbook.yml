@@ -66,10 +66,10 @@
           name: pwslab.postgresql
       when: not psql_exists.stat.exists
 
-    -   name: Execute Postgres Process
-        postgresql_query:
-            # db: sonarqube
-            query: GRANT ALL PRIVILEGES ON DATABASE 'sonar' to sonar
+    # -   name: Execute Postgres Process
+    #     postgresql_query:
+    #         # db: sonarqube
+    #         query: GRANT ALL PRIVILEGES ON DATABASE 'sonar' to sonar
 
     - name: Installing SonarQube
       include_role:
