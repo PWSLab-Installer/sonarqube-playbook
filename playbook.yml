@@ -2,12 +2,12 @@
   connection: local
 
   vars:
-    postgresql_databases:
-        - name: sonar
-    postgresql_users:
-        -   name: sonar
-            password: sonar
-            db: sonar
+    # postgresql_databases:
+    #     - name: sonar
+    # postgresql_users:
+    #     -   name: sonar
+    #         password: sonar
+    #         db: sonar
   tasks:
       
     -   name: Check the version of OS
