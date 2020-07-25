@@ -26,7 +26,7 @@
     password: sonar 
 
 - name: Execute Postgres Commands
-  command: psql -c 'GRANT ALL PRIVILEGES ON DATABASE \'sonar\' to sonar;'
+  command: psql -c 'GRANT ALL PRIVILEGES ON DATABASE sonar to sonar;'
   become: true
   become_user: postgres
   ignore_errors: yes  
