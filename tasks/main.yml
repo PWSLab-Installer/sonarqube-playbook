@@ -11,11 +11,15 @@
     name: sonar
     group: sonar
 
-- name: Create a new database with name "sonar"
-  postgresql_db:
-    name: sonar 
+-   name: Create a new database with name "sonar"
+    become: true
+    become_user: postgres
+    postgresql_db:
+        name: sonar 
 
 - name: Connect to acme database, create django user, and grant access to database and products table
+  become: true
+  become_user: postgres
   postgresql_user:
     db: sonar
     name: sonar
