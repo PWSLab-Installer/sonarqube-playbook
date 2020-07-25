@@ -108,7 +108,7 @@
     daemon_reload: yes
 
 - name: Ensure Sonar is running and set to start on boot
-  service: name=sonar state=started enabled=yes
+  service: name=sonar state=restarted enabled=yes
 
 - name: Allow Sonar time to build on first start
   pause: seconds=180

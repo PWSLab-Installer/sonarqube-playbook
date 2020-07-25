@@ -50,10 +50,18 @@
       include_role:
         name: pwslab.java
       when: 
-        - os_check.stdout | regex_search("CentOS")
+        - os_check.stdout | regex_search("CentOS Linux 7")
+        - not os_check.stdout | regex_search("CentOS Linux 8")
       vars:
         java_packages:
             - java-11-openjdk
+
+    -   name: Install Java 11
+        yum:
+            name: java-11-openjdk-devel
+            state: latest
+        when: 
+            - os_check.stdout | regex_search("CentOS Linux 8")
 
     - name: Installing Java
       include_role:
@@ -64,7 +72,17 @@
     - name: Installing PostgreSQL
       include_role:
           name: pwslab.postgresql
-      when: not psql_exists.stat.exists
+      when: 
+        - not psql_exists.stat.exists
+        - not os_check.stdout | regex_search("CentOS Linux 7")
+
+    - name: Installing PostgreSQL
+      include_role:
+          name: pwslab.postgresql
+      when: 
+        - os_check.stdout | regex_search("CentOS Linux 7")
+      vars:
+        postgresql_version: 10.6
 
     # -   name: Execute Postgres Process
     #     postgresql_query:
