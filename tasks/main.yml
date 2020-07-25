@@ -88,6 +88,25 @@
     mode: 0755
   when: "ansible_service_mgr == 'systemd'"
 
+- name: Set ownership
+  become: true
+  file:
+    path: "/usr/local/sonar/"
+    state: directory
+    recurse: yes
+    owner: sonar
+    group: sonar
+    mode: '0777'
+
+- name: Add VMemory
+  lineinfile:
+    path: /etc/sysctl.conf
+    line: vm.max_map_count=262144
+
+- name: just force systemd to reread configs (2.4 and above)
+  systemd:
+    daemon_reload: yes
+
 - name: Ensure Sonar is running and set to start on boot
   service: name=sonar state=started enabled=yes
 
