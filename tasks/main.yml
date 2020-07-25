@@ -18,13 +18,13 @@
   ignore_errors: yes  
 
 - name: Execute Postgres Commands
-  command: psql -c 'CREATE USER sonar WITH PASSWORD 'sonar';'
+  command: psql -c 'CREATE USER sonar WITH PASSWORD \'sonar\';'
   become: true
   become_user: postgres
   ignore_errors: yes  
 
 - name: Execute Postgres Commands
-  command: psql -c 'GRANT ALL PRIVILEGES ON DATABASE 'sonar' to sonar;'
+  command: psql -c 'GRANT ALL PRIVILEGES ON DATABASE \'sonar\' to sonar;'
   become: true
   become_user: postgres
   ignore_errors: yes  
