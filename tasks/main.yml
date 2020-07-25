@@ -11,17 +11,15 @@
     name: sonar
     group: sonar
 
-- name: Execute Postgres Commands
-  command: psql -c 'create database sonar;'
-  become: true
-  become_user: postgres
-  ignore_errors: yes  
+- name: Create a new database with name "sonar"
+  postgresql_db:
+    name: sonar 
 
-- name: Execute Postgres Commands
-  command: psql -c 'CREATE USER sonar WITH PASSWORD \'sonar\';'
-  become: true
-  become_user: postgres
-  ignore_errors: yes  
+- name: Connect to acme database, create django user, and grant access to database and products table
+  postgresql_user:
+    db: sonar
+    name: sonar
+    password: sonar 
 
 - name: Execute Postgres Commands
   command: psql -c 'GRANT ALL PRIVILEGES ON DATABASE \'sonar\' to sonar;'
