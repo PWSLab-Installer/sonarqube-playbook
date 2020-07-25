@@ -103,6 +103,9 @@
     path: /etc/sysctl.conf
     line: vm.max_map_count=262144
 
+-   name: Execute sysctl
+    command: sysctl -p
+
 - name: just force systemd to reread configs (2.4 and above)
   systemd:
     daemon_reload: yes
