@@ -76,6 +76,15 @@
       when: 
         - os_check.stdout | regex_search("Ubuntu")
 
+    # -   name: Applying replacement on CentOS 7
+    #     lineinfile:
+    #         dest: /root/.ansible/roles/pwslab.postgresql/vars/RedHat-7.yml
+    #         regexp: '^__postgresql_version: "9.2"'
+    #         line: '__postgresql_version: "10"'
+    #         state: present
+    #     when:
+    #       - os_check.stdout | regex_search("CentOS Linux 7")
+
     - name: Installing PostgreSQL
       include_role:
           name: pwslab.postgresql
@@ -83,13 +92,29 @@
         - not psql_exists.stat.exists
         - not os_check.stdout | regex_search("CentOS Linux 7")
 
+    - yum:
+        name: "https://download.postgresql.org/pub/repos/yum/reporpms/EL-{{ ansible_distribution_major_version }}-x86_64/pgdg-redhat-repo-latest.noarch.rpm"
+        state: present
+      when: 
+        - os_check.stdout | regex_search("CentOS Linux 7")
+
     - name: Installing PostgreSQL
       include_role:
           name: pwslab.postgresql
       when: 
         - os_check.stdout | regex_search("CentOS Linux 7")
       vars:
-        postgresql_version: 10.6
+        postgresql_enablerepo: "pgdg96"
+        postgresql_version: 9.6
+        postgresql_packages:
+          - postgresql96
+          - postgresql96-server
+          - postgresql96-contrib
+          - postgresql96-libs
+        postgresql_data_dir: /var/lib/pgsql/9.6/data
+        postgresql_bin_path: /usr/pgsql-9.6/bin
+        postgresql_config_path: /var/lib/pgsql/9.6/data
+        postgresql_daemon: postgresql-9.6
 
     # -   name: Execute Postgres Process
     #     postgresql_query:
